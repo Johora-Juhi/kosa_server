@@ -138,6 +138,13 @@ async function run() {
       res.send(users);
     });
 
+    app.delete("/blogs/:id", verifyJWT, verifyAdmin, async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const result = await blogsCollection.deleteOne(filter);
+      res.send(result);
+    });
+    
     //get all products
     app.get("/products", async (req, res) => {
       const query = {};
