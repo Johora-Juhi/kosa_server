@@ -49,6 +49,7 @@ async function run() {
   try {
     const usersCollection = client.db("hairSalon").collection("users");
     const productsCollection = client.db("hairSalon").collection("products");
+    const blogsCollection = client.db("hairSalon").collection("blogs");
 
     // VERIFY ADMIN
     const verifyAdmin = async (req, res, next) => {
@@ -99,6 +100,12 @@ async function run() {
       res.send(users);
     });
 
+    //get all admins
+    app.get("/users/admins", async (req, res) => {
+      const users = await usersCollection.find({ role: "admin" }).toArray();
+      res.send(users);
+    });
+
     //delete user
     app.delete("/users/:id", verifyJWT, verifyAdmin, async (req, res) => {
       const id = req.params.id;
@@ -124,7 +131,14 @@ async function run() {
       res.send(result);
     });
 
-    //get products
+    //get all blogs 
+    app.get("/blogs", async (req, res) => {
+      const query = {};
+      const users = await blogsCollection.find(query).toArray();
+      res.send(users);
+    });
+
+    //get all products
     app.get("/products", async (req, res) => {
       const query = {};
       const users = await productsCollection.find(query).toArray();
