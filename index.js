@@ -83,6 +83,15 @@ async function run() {
       const result = await usersCollection.insertOne(user);
       res.send(result);
     });
+
+    //get products
+
+    app.get("/products", async (req, res) => {
+      const query = {};
+      const users = await productsCollection.find(query).toArray();
+      res.send(users);
+    });
+    
   } finally {
     // Ensures that the client will close when you finish/error
     // await client.close();
