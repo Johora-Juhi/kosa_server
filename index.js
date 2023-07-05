@@ -99,6 +99,24 @@ async function run() {
       res.send(users);
     });
 
+    // make admin
+    app.put("/users/admin/:id", verifyJWT, verifyAdmin, async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updatedDoc = {
+        $set: {
+          role: "admin",
+        },
+      };
+      const result = await usersCollection.updateOne(
+        filter,
+        updatedDoc,
+        options
+      );
+      res.send(result);
+    });
+
     //get products
     app.get("/products", async (req, res) => {
       const query = {};
