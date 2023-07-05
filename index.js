@@ -92,8 +92,14 @@ async function run() {
       res.send(result);
     });
 
-    //get products
+    //get users 
+    app.get("/users", async (req, res) => {
+      const query = {};
+      const users = await usersCollection.find(query).toArray();
+      res.send(users);
+    });
 
+    //get products
     app.get("/products", async (req, res) => {
       const query = {};
       const users = await productsCollection.find(query).toArray();
