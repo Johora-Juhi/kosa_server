@@ -77,6 +77,14 @@ async function run() {
       res.status(403).send({ accessToken: "" });
     });
 
+    // verify admin token 
+    app.get("/users/admin/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = { email };
+      const user = await usersCollection.findOne(query);
+      res.send({ isAdmin: user?.role === "admin" });
+    });
+
     // create usersCollection
     app.post("/users", async (req, res) => {
       const user = req.body;
@@ -91,7 +99,7 @@ async function run() {
       const users = await productsCollection.find(query).toArray();
       res.send(users);
     });
-    
+
   } finally {
     // Ensures that the client will close when you finish/error
     // await client.close();
