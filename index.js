@@ -50,6 +50,7 @@ async function run() {
     const usersCollection = client.db("hairSalon").collection("users");
     const productsCollection = client.db("hairSalon").collection("products");
     const blogsCollection = client.db("hairSalon").collection("blogs");
+    const commentsCollection = client.db("hairSalon").collection("comment");
 
     // VERIFY ADMIN
     const verifyAdmin = async (req, res, next) => {
@@ -78,7 +79,7 @@ async function run() {
       res.status(403).send({ accessToken: "" });
     });
 
-    // verify admin token 
+    // verify admin token
     app.get("/users/admin/:email", async (req, res) => {
       const email = req.params.email;
       const query = { email };
@@ -93,7 +94,7 @@ async function run() {
       res.send(result);
     });
 
-    //get users 
+    //get users
     app.get("/users", async (req, res) => {
       const query = {};
       const users = await usersCollection.find(query).toArray();
@@ -113,6 +114,7 @@ async function run() {
       const result = await usersCollection.deleteOne(filter);
       res.send(result);
     });
+
     // make admin
     app.put("/users/admin/:id", verifyJWT, verifyAdmin, async (req, res) => {
       const id = req.params.id;
@@ -131,27 +133,81 @@ async function run() {
       res.send(result);
     });
 
-    //get all blogs 
+    //get all blogs
     app.get("/blogs", async (req, res) => {
       const query = {};
       const users = await blogsCollection.find(query).toArray();
       res.send(users);
     });
 
+    //add blog
+    app.post("/blogs", async (req, res) => {
+      const blog = req.body;
+      console.log(blog);
+      const result = await blogsCollection.insertOne(blog);
+      res.send(result);
+    });
+
+    //get blog details
+    app.get("/blogs/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const blog = await blogsCollection.find(query).toArray();
+      res.send(blog);
+    });
+
+    //delete blog
     app.delete("/blogs/:id", verifyJWT, verifyAdmin, async (req, res) => {
       const id = req.params.id;
       const filter = { _id: new ObjectId(id) };
       const result = await blogsCollection.deleteOne(filter);
       res.send(result);
     });
-    
+
+    // add comment
+    app.post("/comments", async (req, res) => {
+      const comments = req.body;
+      console.log(comments);
+      const result = await commentsCollection.insertOne(comments);
+      res.send(result);
+    });
+
+    // // get commnets
+    // app.get("/comments", async (req, res) => {
+    //   const query = {};
+    //   const users = await commentsCollection.find(query).toArray();
+    //   res.send(users);
+    // });
+
+    // // get indivisual comment
+    // app.get("/mycomments", verifyJWT, async (req, res) => {
+    //   const email = req.query.email;
+    //   const decodedEmail = req.decoded.email;
+
+    //   if (email !== decodedEmail) {
+    //     return res.status(403).send({ message: "Forbidden access" });
+    //   }
+    //   const query = {
+    //     userEmail: email,
+    //   };
+    //   const comments = await commentsCollection.find(query).toArray();
+    //   res.send(comments);
+    // });
+
+    // // delete comment
+    // app.delete("/mycomments/:id", verifyJWT, async (req, res) => {
+    //   const id = req.params.id;
+    //   const filter = { _id: new ObjectId(id) };
+    //   const result = await commentsCollection.deleteOne(filter);
+    //   res.send(result);
+    // });
+
     //get all products
     app.get("/products", async (req, res) => {
       const query = {};
       const users = await productsCollection.find(query).toArray();
       res.send(users);
     });
-
   } finally {
     // Ensures that the client will close when you finish/error
     // await client.close();
