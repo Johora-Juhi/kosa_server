@@ -172,12 +172,12 @@ async function run() {
       res.send(result);
     });
 
-    // // get commnets
-    // app.get("/comments", async (req, res) => {
-    //   const query = {};
-    //   const users = await commentsCollection.find(query).toArray();
-    //   res.send(users);
-    // });
+    // get commnets
+    app.get("/comments", async (req, res) => {
+      const query = {};
+      const users = await commentsCollection.find(query).toArray();
+      res.send(users);
+    });
 
     // // get indivisual comment
     // app.get("/mycomments", verifyJWT, async (req, res) => {
