@@ -179,20 +179,20 @@ async function run() {
       res.send(users);
     });
 
-    // // get indivisual comment
-    // app.get("/mycomments", verifyJWT, async (req, res) => {
-    //   const email = req.query.email;
-    //   const decodedEmail = req.decoded.email;
+    // get indivisual comment
+    app.get("/mycomments", verifyJWT, async (req, res) => {
+      const email = req.query.email;
+      const decodedEmail = req.decoded.email;
 
-    //   if (email !== decodedEmail) {
-    //     return res.status(403).send({ message: "Forbidden access" });
-    //   }
-    //   const query = {
-    //     userEmail: email,
-    //   };
-    //   const comments = await commentsCollection.find(query).toArray();
-    //   res.send(comments);
-    // });
+      if (email !== decodedEmail) {
+        return res.status(403).send({ message: "Forbidden access" });
+      }
+      const query = {
+        userEmail: email,
+      };
+      const comments = await commentsCollection.find(query).toArray();
+      res.send(comments);
+    });
 
     // // delete comment
     // app.delete("/mycomments/:id", verifyJWT, async (req, res) => {
