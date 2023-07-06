@@ -194,13 +194,13 @@ async function run() {
       res.send(comments);
     });
 
-    // // delete comment
-    // app.delete("/mycomments/:id", verifyJWT, async (req, res) => {
-    //   const id = req.params.id;
-    //   const filter = { _id: new ObjectId(id) };
-    //   const result = await commentsCollection.deleteOne(filter);
-    //   res.send(result);
-    // });
+    // delete comment
+    app.delete("/mycomments/:id", verifyJWT, async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const result = await commentsCollection.deleteOne(filter);
+      res.send(result);
+    });
 
     //get all products
     app.get("/products", async (req, res) => {
