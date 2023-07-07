@@ -51,6 +51,7 @@ async function run() {
     const productsCollection = client.db("hairSalon").collection("products");
     const blogsCollection = client.db("hairSalon").collection("blogs");
     const commentsCollection = client.db("hairSalon").collection("comment");
+    const interestedCustomerCollection = client.db("hairSalon").collection("interestedCustomer");
 
     // VERIFY ADMIN
     const verifyAdmin = async (req, res, next) => {
@@ -202,6 +203,13 @@ async function run() {
       res.send(result);
     });
 
+    // interested customer
+    app.post("/interestedCustomer", async (req, res) => {
+      const user = req.body;
+      console.log(user);
+      const result = await interestedCustomerCollection.insertOne(user);
+      res.send(result);
+    });
     //get all products
     app.get("/products", async (req, res) => {
       const query = {};
