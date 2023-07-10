@@ -51,7 +51,10 @@ async function run() {
     const productsCollection = client.db("hairSalon").collection("products");
     const blogsCollection = client.db("hairSalon").collection("blogs");
     const commentsCollection = client.db("hairSalon").collection("comment");
-    const interestedCustomerCollection = client.db("hairSalon").collection("interestedCustomer");
+    const interestedCustomerCollection = client
+      .db("hairSalon")
+      .collection("interestedCustomer");
+      const ordersCollection = client.db("hairSalon").collection("orders");
 
     // VERIFY ADMIN
     const verifyAdmin = async (req, res, next) => {
@@ -215,6 +218,14 @@ async function run() {
       const query = {};
       const users = await productsCollection.find(query).toArray();
       res.send(users);
+    });
+
+    // place order 
+    app.post("/orderPlace", verifyJWT, async (req, res) => {
+      const orderPlace = req.body;
+      console.log(orderPlace);
+      const result = await ordersCollection.insertOne(orderPlace);
+      res.send(result);
     });
   } finally {
     // Ensures that the client will close when you finish/error
